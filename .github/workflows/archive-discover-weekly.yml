@@ -1,6 +1,5 @@
 name: Archive Spotify Discover Weekly Playlist
 
-# Controls when the workflow will run
 on:
   schedule:
     # Mondays at 7:57
@@ -9,21 +8,20 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   archive_discover_weekly:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout main
+        uses: actions/checkout@v3
+
       - name: Setup Python
         uses: actions/setup-python@v4.7.1
         with:
             cache: 'pip' # caching pip dependencies
-        #   # Version range or exact version of Python or PyPy to use, using SemVer's version range syntax. Reads from .python-version if unset.
-        #   python-version: # optional
+            # Version range or exact version of Python or PyPy to use, using SemVer's version range syntax. Reads from .python-version if unset.
+            python-version: '3.12'
         #   # File containing the Python version to use. Example: .python-version
         #   python-version-file: # optional
         #   # Used to specify a package manager for caching in the default directory. Supported values: pip, pipenv, poetry.
@@ -44,10 +42,5 @@ jobs:
       - name: Install Python deps
         run: pip install -r requirements.txt
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout main
-        uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
+      - name: Run playlist archiver script
         run: python playlist-archiver.py "Discover Weekly" "DW - %b %e" "$SPOTIFY_CLIENT_ID" -s "SPOTIFY_CLIENT_SECRET" -d
