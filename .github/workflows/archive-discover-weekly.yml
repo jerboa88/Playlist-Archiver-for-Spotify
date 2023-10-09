@@ -43,4 +43,4 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run playlist archiver script
-        run: python playlist-archiver.py "Discover Weekly" "DW - %b %e" "$SPOTIFY_CLIENT_ID" -s "SPOTIFY_CLIENT_SECRET" -d
+        run: python playlist-archiver.py "Discover Weekly" "DW - %b %e" "$SPOTIFY_CLIENT_ID" -s "$SPOTIFY_CLIENT_SECRET" -d
