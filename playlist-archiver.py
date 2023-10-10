@@ -9,10 +9,11 @@ app_desc = 'A Python script that makes a copy of a playlist. Useful for automati
 scope = ['playlist-read-private', 'playlist-read-collaborative', 'playlist-modify-private']
 client_secret_filename = 'client_secret.txt'
 redirect_uri = 'http://127.0.0.1:9090'
+is_debug_mode = False
 
 
 # Functions
-def debug(msg, is_debug_mode=False):
+def debug(msg):
 	if is_debug_mode:
 		print(f'DEBUG: {msg}')
 
@@ -22,6 +23,8 @@ def warn(msg):
 
 
 def parse_args(app_name, app_desc):
+	debug('Parsing arguments')
+
 	descriptions = {
 		'input_playlist_name': 'The name of the playlist you want to make a copy of. The name must match exactly. This is required',
 		'output_playlist_name': 'The name of the output playlist. strftime format codes can be used to include the date/time in the name. This is required',
@@ -73,6 +76,8 @@ def parse_args(app_name, app_desc):
 
 
 def authorize(scope, client_id, client_secret, redirect_uri):
+	debug('Connecting to the Spotify API')
+
 	return spotipy.Spotify(auth_manager=SpotifyOAuth(
 		scope=scope,
 		client_id=client_id,
@@ -82,6 +87,8 @@ def authorize(scope, client_id, client_secret, redirect_uri):
 
 
 def get_playlist_id(playlist_name):
+	debug(f'Getting playlist id for {playlist_name}')
+
 	chunk_size = 50
 	chunk_offset = 0
 	playlist_id = None
@@ -90,6 +97,7 @@ def get_playlist_id(playlist_name):
 		chunked_playlists = sp.current_user_playlists(limit=chunk_size, offset=chunk_offset)['items']
 
 		if not chunked_playlists:
+			debug('Finished searching through playlists')
 			break
 
 		for playlist in chunked_playlists:
@@ -106,6 +114,8 @@ def get_playlist_id(playlist_name):
 
 
 def get_playlist_track_ids(playlist_id):
+	debug(f'Getting track ids for playlist {playlist_id}')
+
 	chunk_size = 100
 	chunk_offset = 0
 	track_ids = []
@@ -114,6 +124,7 @@ def get_playlist_track_ids(playlist_id):
 		chunked_tracks = sp.playlist_tracks(playlist_id, fields='items(track(id))', limit=chunk_size, offset=chunk_offset)['items']
 
 		if not chunked_tracks:
+			debug(f'{len(track_ids)} track ids found')
 			break
 
 		track_ids.extend(list(map(lambda track : track['track']['id'], chunked_tracks)))
@@ -124,19 +135,25 @@ def get_playlist_track_ids(playlist_id):
 
 
 def create_playlist(user_id, playlist_name, track_ids, app_name):
+	debug(f'Creating new playlist {playlist_name}')
+
 	ts = datetime.now()
 	playlist_name = ts.strftime(playlist_name)
 	playlist = sp.user_playlist_create(user_id, playlist_name, public=False, collaborative=False, description=f'Playlist created by {app_name} on {ts}')
 
 	sp.playlist_add_items(playlist['id'], track_ids)
 
-	debug(playlist)
+	debug(f'Playlist created: {playlist}')
 
+
+debug('Script started')
 
 args = parse_args(app_name, app_desc)
-debug(args, args.debug)
+is_debug_mode = args.debug
 sp = authorize(scope, args.client_id, args.client_secret, redirect_uri)
 user_id = sp.me()['id']
 playlist_id = get_playlist_id(args.input_playlist_name)
 track_ids = get_playlist_track_ids(playlist_id)
 create_playlist(user_id, args.output_playlist_name, track_ids, app_name)
+
+debug('Script finished')
