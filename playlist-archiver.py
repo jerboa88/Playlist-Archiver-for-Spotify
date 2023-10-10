@@ -134,6 +134,7 @@ def create_playlist(user_id, playlist_name, track_ids, app_name):
 
 
 args = parse_args(app_name, app_desc)
+debug(args, args.debug)
 sp = authorize(scope, args.client_id, args.client_secret, redirect_uri)
 user_id = sp.me()['id']
 playlist_id = get_playlist_id(args.input_playlist_name)
