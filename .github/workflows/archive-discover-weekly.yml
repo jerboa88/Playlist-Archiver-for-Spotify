@@ -42,5 +42,12 @@ jobs:
       - name: Install Python deps
         run: pip install -r requirements.txt
 
+      # - name: Run playlist archiver script
+      #   run: python playlist-archiver.py "Discover Weekly" "DW - %b %e" "${{ secrets.SPOTIFY_CLIENT_ID }}" -s "${{ secrets.SPOTIFY_CLIENT_SECRET }}" -d
+
       - name: Run playlist archiver script
+        shell: bash
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: python playlist-archiver.py "Discover Weekly" "DW - %b %e" "$SPOTIFY_CLIENT_ID" -s "$SPOTIFY_CLIENT_SECRET" -d
