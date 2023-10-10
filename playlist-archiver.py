@@ -146,14 +146,17 @@ def create_playlist(user_id, playlist_name, track_ids, app_name):
 	debug(f'Playlist created: {playlist}')
 
 
-debug('Script started')
+print('Script started')
 
 args = parse_args(app_name, app_desc)
 is_debug_mode = args.debug
+
+print(is_debug_mode)
+
 sp = authorize(scope, args.client_id, args.client_secret, redirect_uri)
 user_id = sp.me()['id']
 playlist_id = get_playlist_id(args.input_playlist_name)
 track_ids = get_playlist_track_ids(playlist_id)
 create_playlist(user_id, args.output_playlist_name, track_ids, app_name)
 
-debug('Script finished')
+print('Script finished')
