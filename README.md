@@ -1,71 +1,71 @@
-<!-- DELETE THIS IF CREATING FROM TEMPLATE -->
-### Badges for Different Project Types
-
-|	Project Type											| Badge																																																																												|
-|	---------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|	Android App:									| ![](https://img.shields.io/badge/type-Android_App-cddc39.svg "Project type")																																								|
-|	Browser Extension:						| ![](https://img.shields.io/badge/type-Extension-ffc107.svg "Project type")																																									|
-|	CLI App:											| ![](https://img.shields.io/badge/type-CLI_App-f44336.svg "Project type")																																										|
-|	JS Library / Node.js Module:	| ![](https://img.shields.io/badge/type-JS_Library-4caf50.svg "Project type") ![](https://img.shields.io/badge/type-Node.js_Module-4caf50.svg "Project type")	|
-|	Markdown:											| ![](https://img.shields.io/badge/type-Markdown-9c27b0.svg "Project type")																																										|
-|	Website / Web App:						| ![](https://img.shields.io/badge/type-Website-ff5722.svg "Project type") ![](https://img.shields.io/badge/type-Web_App-ff5722.svg "Project type")						|
-|	Other / GIMP Plugin						|	![](https://img.shields.io/badge/type-Other-2196f3.svg "Project type") ![](https://img.shields.io/badge/type-GIMP_Plugin-2196f3.svg "Project type")					|
-
-
----
-
-
 <!-- Project Header -->
-<div align="center"> 
+<div align="center">
   <img class="projectLogo" src="https://via.placeholder.com/256.jpg" alt="Project logo" title="Project logo" width="256">
 
-  <h1 class="projectName">PROJECT NAME</h1>
+  <h1 class="projectName">Playlist Archiver for Spotify</h1>
 
   <p class="projectBadges">
-    <a href="https://unmaintained.tech/">
-      <img src="https://unmaintained.tech/badge.svg" alt="No Maintenance Intended" title="No Maintenance Intended"/>
-    </a>
-    <img src="https://img.shields.io/badge/type-Extension-ffc107.svg" alt="Project type" title="Project type">
-    <img src="https://img.shields.io/github/languages/top/jerboa88/README-Template.svg" alt="Language" title="Language">
-    <a href="https://chrome.google.com/webstore/detail/dark-mode-for-outlook/kjfbefcenipnnpbcbbklcidpjiamlcpl">
-      <img src="https://img.shields.io/chrome-web-store/v/kjfbefcenipnnpbcbbklcidpjiamlcpl.svg" alt="View on the Chrome Web Store" title="View on the Chrome Web Store"/>
-    </a>
-    <a href="https://addons.mozilla.org/en-US/firefox/addon/dark-mode-for-outlook/">
-      <img src="https://img.shields.io/amo/v/dark-mode-for-outlook.svg" alt="View on the Firefox Add-ons Page" title="View on the Firefox Add-ons Page"/>
-    </a>
-    <a href="https://microsoftedge.microsoft.com/addons/detail/ncmfoiokkfipenppipihehpoikhacpep">
-      <img src="https://img.shields.io/badge/dynamic/json?label=edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fncmfoiokkfipenppipihehpoikhacpep" alt="View on the Edge Add-ons Page" title="View on the Edge Add-ons Page"/>
-    </a>
-    <a href="https://addons.opera.com/en/extensions/details/dark-mode-for-outlook/">
-      <img src="https://img.shields.io/badge/dynamic/json?label=opera%20add-on&color=blue&query=%24.tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fjerboa88%2Fdark-mode-for-outlook%2Freleases%2Flatest" alt="View on the Opera Add-ons Page" title="View on the Opera Add-ons Page"/>
-    </a>
-    <img src="https://img.shields.io/github/repo-size/jerboa88/README-Template.svg" alt="Repository size" title="Repository size">
+    <img src="https://img.shields.io/badge/type-CLI_App-f44336.svg" alt="Project type" title="Project type">
+    <img src="https://img.shields.io/github/languages/top/jerboa88/Playlist-Archiver-for-Spotify.svg" alt="Language" title="Language">
+    <img src="https://img.shields.io/github/repo-size/jerboa88/Playlist-Archiver-for-Spotify.svg" alt="Repository size" title="Repository size">
     <a href="LICENSE">
-      <img src="https://img.shields.io/github/license/jerboa88/README-Template.svg" alt="Project license" title="Project license"/>
+      <img src="https://img.shields.io/github/license/jerboa88/Playlist-Archiver-for-Spotify.svg" alt="Project license" title="Project license"/>
     </a>
   </p>
-  
+
   <p class="projectDesc">
-    LONG DESCRIPTION
+    A Python script that makes a copy of a playlist. Useful for automating archival of Discover Weekly and Release Radar playlists every week via Github Actions, Cron, Windows Task Scheduler, or similar tools.
   </p>
-  
+
   <br/>
 </div>
 
 
+## About
+This project includes a Python script that copies and renames a playlist, as well as Github Actions workflows that can be used to automate the archival of playlists on a schedule. This script is designed to be used with Github Actions, but can be used with other automation tools as well.
+
+
 ## Installation
-...
+If running locally, make sure you are using Python 3, then install the required Python packages with `pip install -r requirements.txt`.
 
 
 ## Usage
-...
+### With Github Actions
+1. Create a new app via the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard). Make sure the `Redirect URI` matches what is in the `playlist-archiver` script (ex. http://127.0.0.1:9090). Make note of the `Client ID` and `Client Secret` for later.
+2. Fork this repo and clone it
+3. Run the script locally to grant the script access to your Spotify account like so: `python playlist-archiver.py "input_name" "output_name" "spotify_client_id" "spotify_client_secret"`. Replace `spotify_client_id` and `spotify_client_secret` with your own values. `input_name` and `output_name` are not important at this step. After granting the app access, a `tokens.txt` file will be created in the same directory as the script. This file contains your access and refresh tokens and should be kept secret.
+4. Create four repository secrets in your forked repo with the following names and values (see [Using secrets in GitHub Actions](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions)):
+    - `SPOTIFY_CLIENT_ID`: The client id from step 1
+    - `SPOTIFY_CLIENT_SECRET`: The client secret from step 1
+    - `SPOTIFY_ACCESS_TOKEN`: The access token from `tokens.txt`
+    - `SPOTIFY_REFRESH_TOKEN`: The refresh token from `tokens.txt`
+5. Create your own workflows or edit the existing ones under [.github/workflows/](.github/workflows/). The existing workflows are set up to archive Discover Weekly and Release Radar playlists every Monday and Friday, respectively. Edit the `cron` schedule to change when the script runs. See below for all available arguments for the script.
+
+**All available arguments:**
+```
+usage: Playlist Archiver for Spotify [-h] [--access_token ACCESS_TOKEN] [--refresh_token REFRESH_TOKEN] [--debug] input_playlist_name output_playlist_name client_id client_secret
+
+A Python script that makes a copy of a playlist. Useful for automating archival of Discover Weekly and Release Radar playlists every week.
+
+positional arguments:
+  input_playlist_name   The name of the playlist you want to make a copy of. The name must match exactly. This is required
+  output_playlist_name  The name of the output playlist. strftime format codes can be used to include the date/time in the name. This is required
+  client_id             Your client ID for Spotify. A client ID is required for this program to work
+  client_secret         Your client secret for Spotify. A client secret is required for this program to work
+
+options:
+  -h, --help            show this help message and exit
+  --access_token ACCESS_TOKEN, -a ACCESS_TOKEN
+                        Your access token for Spotify. This can be found in tokens.txt after the program is run for the first time
+  --refresh_token REFRESH_TOKEN, -r REFRESH_TOKEN
+                        Your refresh token for Spotify. This can be found in tokens.txt after the program is run for the first time
+  --debug, -d           Whether to print additional information to the console for debugging. Default: false
+```
 
 
-## Screenshots
-TABLE TITLE | &#8291;
-:-:|:-:
-![Screenshot 1](screenshots/1.png) | ![Screenshot 2](screenshots/2.png)
-![Screenshot 3](screenshots/3.png) | ![Screenshot 4](screenshots/4.png)
+## Limitations
+- This script must be run once locally before the Github Actions workflows will work. This is because the Spotify API requires user authorization via the browser, which is not possible in a headless environment
+- Playlists can not be placed into folders because there is currently no way to create or manage folders via the Spotify API. If you want the archived playlist to be in a folder, you will have to move them manually
 
 
 ## Contributing
