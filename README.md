@@ -1,6 +1,6 @@
 <!-- Project Header -->
 <div align="center">
-  <img class="projectLogo" src="https://via.placeholder.com/256.jpg" alt="Project logo" title="Project logo" width="256">
+  <img class="projectLogo" src="logo.svg" alt="Project logo" title="Project logo" width="256">
 
   <h1 class="projectName">Playlist Archiver for Spotify</h1>
 
@@ -74,3 +74,5 @@ Contributions, issues, and forks are welcome but this is a hobby project so don'
 
 ## License
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+This project includes various resources which carry their own copyright notices and license terms. See LICENSE-THIRD-PARTY.md for more details.
