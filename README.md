@@ -7,6 +7,8 @@
   <p class="projectBadges">
     <img src="https://img.shields.io/badge/type-CLI_App-f44336.svg" alt="Project type" title="Project type">
     <img src="https://img.shields.io/github/languages/top/jerboa88/Playlist-Archiver-for-Spotify.svg" alt="Language" title="Language">
+    <img src="https://img.shields.io/github/actions/workflow/status/jerboa88/Playlist-Archiver-for-Spotify/archive-discover-weekly.yml?logo=spotify&label=Archive%20Discover%20Weekly" alt="GitHub Workflow Status" title="GitHub Workflow Status">
+    <img src="https://img.shields.io/github/actions/workflow/status/jerboa88/Playlist-Archiver-for-Spotify/archive-release-radar.yml?logo=spotify&label=Archive%20Release%20Radar" alt="GitHub Workflow Status" title="GitHub Workflow Status">
     <img src="https://img.shields.io/github/repo-size/jerboa88/Playlist-Archiver-for-Spotify.svg" alt="Repository size" title="Repository size">
     <a href="LICENSE">
       <img src="https://img.shields.io/github/license/jerboa88/Playlist-Archiver-for-Spotify.svg" alt="Project license" title="Project license"/>
