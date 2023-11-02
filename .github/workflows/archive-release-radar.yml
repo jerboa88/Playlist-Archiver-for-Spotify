@@ -1,4 +1,4 @@
-name: Archive Spotify Release Radar Playlist
+name: Archive Release Radar Playlist
 
 on:
   schedule:
@@ -31,4 +31,8 @@ jobs:
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           SPOTIFY_ACCESS_TOKEN: ${{ secrets.SPOTIFY_ACCESS_TOKEN }}
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
-        run: python playlist-archiver.py "Release Radar" "RR - %b %e" "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET" -a "$SPOTIFY_ACCESS_TOKEN" -r "$SPOTIFY_REFRESH_TOKEN" -d
+        run: >
+          python playlist-archiver-for-spotify.py
+          "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET"
+          "$SPOTIFY_ACCESS_TOKEN" "$SPOTIFY_REFRESH_TOKEN"
+          "Release Radar" "RR - %b %e"
