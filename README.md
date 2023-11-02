@@ -64,7 +64,7 @@ options:
 
 
 ## Limitations
-- This script must be run once locally before the GitHub Actions workflows will work. This is because the Spotify API requires user authorization via the browser, which is not possible in a headless environment
+- The setup script must be run once locally before the GitHub Actions workflows will work. This is because the Spotify API requires user authorization via the browser, which is not possible in a headless environment
 - Playlists can not be placed into folders because there is currently no way to create or manage folders via the Spotify API. If you want the archived playlist to be in a folder, you will have to move them manually
 
 
