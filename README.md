@@ -16,7 +16,7 @@
   </p>
 
   <p class="projectDesc">
-    A Python script that makes a copy of a playlist. Useful for automating archival of Discover Weekly and Release Radar playlists every week via GitHub Actions, Cron, Windows Task Scheduler, or similar tools.
+    Automatically archive Spotify playlists using Python & GitHub Actions. Never lose your Discover Weekly playlist again!
   </p>
 
   <br/>
@@ -24,7 +24,9 @@
 
 
 ## About
-This project includes a Python script that copies and renames a playlist, as well as GitHub Actions workflows that can be used to automate the archival of playlists on a schedule. This script is designed to be used with GitHub Actions, but can be used with other automation tools as well.
+A Python script for copying Spotify playlists. This can be used with the provided GitHub Actions workflows to automatically archive Discover Weekly and Release Radar playlists every week.
+
+If you prefer, you can run the script manually, or with other automation tools like Cron or Windows Task Scheduler instead of GitHub Actions.
 
 
 ## Installation
