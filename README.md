@@ -33,6 +33,10 @@ If running locally, make sure you are using Python 3, then install the required 
 
 ## Usage
 ### With GitHub Actions
+
+> [!NOTE]
+> GitHub automatically disables scheduled workflows if there has been no repository activity for some time. When a workflow is about to be disabled, GitHub will send you an email and give you the option to keep running it in the `Actions` tab. Alternatively, you can make a commit every 60 days to keep the repository active.
+
 1. Create a new app via the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard). Make sure the `Redirect URI` you set matches what is in `common.py` (it is `http://127.0.0.1:9090` by default). Make note of the `Client ID` and `Client Secret` for later.
 2. Fork this repo and clone it
 3. Run `python setup.py SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET` on your local machine to grant the script access to your Spotify account. Replace `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` with your own values from step 1. After granting the app access, a `tokens.txt` file will be created in the same directory as the script. This file contains your access and refresh tokens and should be kept secret.
