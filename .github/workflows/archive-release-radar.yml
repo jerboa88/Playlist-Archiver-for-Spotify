@@ -1,22 +1,21 @@
 name: Archive Release Radar Playlist
 
 on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
   schedule:
     # Run Fridays at 7:57
     - cron: "57 7 * * 5"
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 jobs:
   archive_release_radar:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4.7.1
+        uses: actions/setup-python@v4
         with:
           python-version: '3.12'
           cache: 'pip'
