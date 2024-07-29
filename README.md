@@ -15,7 +15,7 @@
     </a>
   </p>
 
-  <p class="projectDesc">
+  <p class="projectDesc" data-exposition="A CLI app that automatically archives Spotify playlists. Written in Python, this program is designed to be run as part of a scheduled CI workflow using GitHub Actions. This project was created as a way to automate a task I was doing manually, and to get more experience working with GitHub Actions and the Spotify API.">
     Automatically archive Spotify playlists using Python & GitHub Actions. Never lose your Discover Weekly playlist again!
   </p>
 
