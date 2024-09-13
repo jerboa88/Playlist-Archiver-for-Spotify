@@ -68,6 +68,7 @@ def get_playlist_id(sp, playlist_name):
 	chunk_size = 50
 	chunk_offset = 0
 	playlist_id = None
+	playlist_names = []
 
 	while not playlist_id:
 		chunked_playlists = sp.current_user_playlists(limit=chunk_size, offset=chunk_offset)['items']
@@ -80,11 +81,16 @@ def get_playlist_id(sp, playlist_name):
 			if playlist['name'] == playlist_name:
 				playlist_id = playlist['id']
 				debug(f'Playlist id of {playlist_name} is {playlist_id}')
+				break
+			else:
+				playlist_names.append(playlist['name'])
 
 		chunk_offset += chunk_size
 
 	if not playlist_id:
-		warn(f'Playlist {playlist_name} not found. Is the playlist name correct?')
+		playlist_names.sort()
+		formatted_playlist_names = '\n  '.join(playlist_names)
+		raise ValueError(f'Playlist "{playlist_name}" not found. Is the playlist name correct? Available playlists:\n  {formatted_playlist_names}')
 
 	return playlist_id
 
