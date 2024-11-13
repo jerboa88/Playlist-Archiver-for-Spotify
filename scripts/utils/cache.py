@@ -1,27 +1,4 @@
-# Reusable classes and functions
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import CacheHandler
-
-
-# Constants
-CONSTANTS = {
-	'app_name': 'Playlist Archiver for Spotify',
-	'app_desc': 'A Python script that makes a copy of a playlist. Useful for automating archival of Discover Weekly and Release Radar playlists every week.',
-	'scope': 'playlist-read-private playlist-read-collaborative playlist-modify-private',
-	'redirect_uri': 'http://127.0.0.1:9090',
-	'tokens_filename': 'tokens.txt',
-}
-
-
-# Logging functions
-def debug(msg, is_debug_mode=False):
-	if is_debug_mode:
-		print(f'DEBUG: {msg}')
-
-
-def warn(msg):
-	print(f'WARN: {msg}')
 
 
 # Custom cache handler for Spotipy
@@ -63,17 +40,3 @@ class CacheArgHandler(CacheHandler):
 		self.token_type = token_info['token_type']
 		self.expires_in = token_info['expires_in']
 		self.expires_at = token_info['expires_at']
-
-
-# Spotify authorization
-def authorize(scope, client_id, client_secret, redirect_uri, cache_handler, open_browser=False):
-	debug('Connecting to the Spotify API')
-
-	return spotipy.Spotify(auth_manager=SpotifyOAuth(
-		scope=scope,
-		client_id=client_id,
-		client_secret=client_secret,
-		redirect_uri=redirect_uri,
-		cache_handler=cache_handler,
-		open_browser=open_browser,
-	))
