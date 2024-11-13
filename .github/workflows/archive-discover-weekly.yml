@@ -32,17 +32,7 @@ jobs:
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
         run: >
           echo "SPOTIFY_PLAYLIST_ID=$(
-            python scripts/get-playlist-id.py
-            "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET"
-            "$SPOTIFY_ACCESS_TOKEN" "$SPOTIFY_REFRESH_TOKEN"
-            'Discover Weekly'
-            'Découvertes de la semaine'
-            'Découvertes hebdomadaires'
-            'Descubrimiento semanal'
-            'Descobertas da Semana'
-            'Descubrimiento semanal'
-            'اكتشف هذا الأسبوع'
-            'Открытиях недели'
+            python scripts/get-playlist-id.py "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET" "$SPOTIFY_ACCESS_TOKEN" "$SPOTIFY_REFRESH_TOKEN" 'Discover Weekly' 'Découvertes de la semaine' 'Découvertes hebdomadaires' 'Descubrimiento semanal' 'Descobertas da Semana' 'Descubrimiento semanal' 'اكتشف هذا الأسبوع' 'Открытиях недели'
           )" >> $GITHUB_ENV
 
       - name: Copy playlist
