@@ -17,13 +17,13 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
           cache: 'pip'
 
       - name: Install Python deps
         run: pip install -r requirements.txt
 
-      - name: Run playlist archiver script
+      - name: Get playlist ID
         shell: bash
         env:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
@@ -31,7 +31,19 @@ jobs:
           SPOTIFY_ACCESS_TOKEN: ${{ secrets.SPOTIFY_ACCESS_TOKEN }}
           SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
         run: >
-          python playlist-archiver-for-spotify.py
+          echo "SPOTIFY_PLAYLIST_ID=$(
+            python scripts/get-playlist-id.py "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET" "$SPOTIFY_ACCESS_TOKEN" "$SPOTIFY_REFRESH_TOKEN" 'Release Radar' 'Radar des sorties' 'Radar à nouveautés' 'Radar de Novedades' 'Radar de Novidades' 'Radar de novedades' 'موسيقتك الجديدة' 'Радар новинок' 'Radar premier' 'Uutuuskattaus' 'Zeneradar' '신곡 레이더' 'Nhạc mới phát hành'
+          )" >> $GITHUB_ENV
+
+      - name: Copy playlist
+        shell: bash
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_ACCESS_TOKEN: ${{ secrets.SPOTIFY_ACCESS_TOKEN }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+        run: >
+          python scripts/copy-playlist.py
           "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET"
           "$SPOTIFY_ACCESS_TOKEN" "$SPOTIFY_REFRESH_TOKEN"
-          "Radar de Novedades" "RR - %b %e"
+          "$SPOTIFY_PLAYLIST_ID" "RR - %b %e"
