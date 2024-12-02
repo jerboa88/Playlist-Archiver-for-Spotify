@@ -1,12 +1,16 @@
 name: Archive Discover Weekly Playlist
-
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
   schedule:
     # Run Mondays at 7:57
     - cron: "57 7 * * 1"
-
+# Make sure that you have added these secrets in your repository settings
+env:
+  SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+  SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+  SPOTIFY_ACCESS_TOKEN: ${{ secrets.SPOTIFY_ACCESS_TOKEN }}
+  SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
 jobs:
   archive_discover_weekly:
     runs-on: ubuntu-latest
@@ -23,25 +27,24 @@ jobs:
       - name: Install Python deps
         run: pip install -r requirements.txt
 
-      - name: Get playlist ID
-        shell: bash
-        env:
-          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-          SPOTIFY_ACCESS_TOKEN: ${{ secrets.SPOTIFY_ACCESS_TOKEN }}
-          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
-        run: >
-          echo "SPOTIFY_PLAYLIST_ID=$(
-            python scripts/get-playlist-id.py "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET" "$SPOTIFY_ACCESS_TOKEN" "$SPOTIFY_REFRESH_TOKEN" 'Discover Weekly' 'Découvertes de la semaine' 'Découvertes hebdomadaires' 'Descubrimiento semanal' 'Descobertas da Semana' 'Descubrimiento semanal' 'اكتشف هذا الأسبوع' 'Открытиях недели'
-          )" >> $GITHUB_ENV
+      # Use a helper script to get the ID of the Release Radar playlist and store it in the SPOTIFY_PLAYLIST_ID environment variable
+      # We pass multiple names because the name of the playlist can vary between countries
+      # Note: This step is disabled because the Spotify API no longer returns information for curated playlists. You can uncomment this step if you want to try using it
+      # - name: Get playlist ID
+      #   shell: bash
+      #   run: >
+      #     echo "SPOTIFY_PLAYLIST_ID=$(
+      #       python scripts/get-playlist-id.py "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET" "$SPOTIFY_ACCESS_TOKEN" "$SPOTIFY_REFRESH_TOKEN" 'Discover Weekly' 'Découvertes de la semaine' 'Découvertes hebdomadaires' 'Descubrimiento semanal' 'Descobertas da Semana' 'Descubrimiento semanal' 'اكتشف هذا الأسبوع' 'Открытиях недели'
+      #     )" >> $GITHUB_ENV
 
+      # Make a copy of the Discover Weekly playlist and name it "DW - %b %e" (e.g. "DW - Jan 1")
       - name: Copy playlist
         shell: bash
         env:
-          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
-          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
-          SPOTIFY_ACCESS_TOKEN: ${{ secrets.SPOTIFY_ACCESS_TOKEN }}
-          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+          # The ID of the playlist you want to copy
+          # If you don't want your playlist ID to be public, you can create a secret in your repository settings and set the env variable to ${{ secrets.SPOTIFY_PLAYLIST_ID }}
+          # Note: If you are using the above step to get the playlist ID programmatically, remove this line
+          SPOTIFY_PLAYLIST_ID: 37i9dQZEVXbhYgkh3qCN18
         run: >
           python scripts/copy-playlist.py
           "$SPOTIFY_CLIENT_ID" "$SPOTIFY_CLIENT_SECRET"
