@@ -44,13 +44,33 @@ If you prefer, you can run the script manually, or with other automation tools l
 
 
 ## Usage
-### With GitHub Actions
+To copy a playlist, you'll need to call [copy-playlist.py] with the ID of the input playlist, a name for the destination playlist, and your Spotify credentials. See [Advanced Script Usage] for more details.
 
+To find the ID of a playlist, see [Finding the Playlist ID].
+
+For examples on how to run the script automatically, see [Scheduling].
+
+### Finding the Playlist ID
+#### Manually
+If you already know the playlist you want to copy, the most reliable way to get its ID is to just copy it from Spotify.
+
+1. Open Spotify and navigate to the playlist you want to copy.
+2. Right-click on the playlist and select `Share` > `Copy link to playlist`.
+3. The ID of the playlist is the last part of the URL. For example, the ID of the playlist `https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC` is `37i9dQZF1DXdPec7aLTmlC`.
+
+#### Programmatically
+> [!IMPORTANT]
+> This helper script may not work reliably because the Spotify API no longer seems to return curated playlists like Discover Weekly and Release Radar in the list of a user's playlists. Feel free to try it, but if you want to copy these playlists, you'll probably need to use the manual method instead.
+
+If you want to programmatically find the ID of a playlist, you can use the [get-playlist-id.py] helper script. This script will search for a playlist with a given name and return its ID. See [Advanced Script Usage] for more details.
+
+
+### Scheduling
+#### With GitHub Actions
 We can use GitHub Actions to automatically run the script every week.
 
 > [!NOTE]
 > GitHub automatically disables scheduled workflows if there has been no repository activity for some time. When a workflow is about to be disabled, GitHub will send you an email and give you the option to keep running it in the `Actions` tab. Alternatively, you can make a commit every 60 days to keep the repository active.
-
 
 1. Create four repository secrets in your forked repo with the following names and values (see [Using secrets in GitHub Actions]):
     - `SPOTIFY_CLIENT_ID`: The client id from step 1
@@ -145,6 +165,9 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 This project includes various resources which carry their own copyright notices and license terms. See [LICENSE-THIRD-PARTY.md](LICENSE-THIRD-PARTY.md) for more details.
 
 
+[Finding the Playlist ID]: #finding-the-playlist-id
+[Scheduling]: #scheduling
+[Advanced Script Usage]: #advanced-script-usage
 [setup.py]: scripts/setup.py
 [get-playlist-id.py]: scripts/get-playlist-id.py
 [copy-playlist.py]: scripts/copy-playlist.py
