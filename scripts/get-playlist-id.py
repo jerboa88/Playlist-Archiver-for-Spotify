@@ -67,6 +67,10 @@ def get_playlist_id(sp, playlist_names):
 			break
 
 		for playlist in chunked_playlists:
+			# For some reason, playlists are occasionally null. If this happens, skip it
+			if not playlist:
+				continue
+
 			if does_playlist_match_names(sp, playlist['name'], playlist_names):
 				playlist_id = playlist['id']
 
