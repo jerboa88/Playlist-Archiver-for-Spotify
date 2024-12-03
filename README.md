@@ -24,6 +24,12 @@
 
 
 ## About
+
+> [!IMPORTANT]
+> **Spotify has killed this script.** On November 27, 2024, Spotify implemented [new changes to their Web API] that makes it impossible to retrieve information about "Algorithmic and Spotify-owned editorial playlists". You can still use this script to make copies of other types of playlists, but it will no longer work for Discover Weekly, Release Radar, Spotify Wrapped, or any other algorithmic playlists.
+>
+> It is unfortunate that Spotify has chosen to make this change, and disappointing that they did so without warning to developers, many of whom have far more complicated projects that rely on this functionality. I hope that they will reconsider this decision in the future. If this affects you, you can leave a comment on [this Spotify Community post] to let them know how you feel.
+
 A Python script for making copies of Spotify playlists. This can be used with the provided GitHub Actions workflows to automatically archive Discover Weekly and Release Radar playlists every week.
 
 If you prefer, you can run the script manually, or with other automation tools like Cron or Windows Task Scheduler instead of GitHub Actions.
@@ -59,9 +65,6 @@ If you already know the playlist you want to copy, the most reliable way to get 
 3. The ID of the playlist is the last part of the URL. For example, the ID of the playlist `https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC` is `37i9dQZF1DXdPec7aLTmlC`.
 
 #### Programmatically
-> [!IMPORTANT]
-> This helper script may not work reliably because the Spotify API no longer seems to return curated playlists like Discover Weekly and Release Radar in the list of a user's playlists. Feel free to try it, but if you want to copy these playlists, you'll probably need to use the manual method instead.
-
 If you want to programmatically find the ID of a playlist, you can use the [get-playlist-id.py] helper script. This script will search for a playlist with a given name and return its ID. See [Advanced Script Usage] for more details.
 
 
@@ -176,3 +179,5 @@ This project includes various resources which carry their own copyright notices 
 [Spotify Developer Dashboard]: https://developer.spotify.com/dashboard
 [Using secrets in GitHub Actions]: https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions
 [strftime format codes]: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+[new changes to their Web API]: https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api
+[this Spotify Community post]: https://community.spotify.com/t5/Spotify-for-Developers/Changes-to-Web-API/m-p/6540414
