@@ -12,8 +12,9 @@ from utils.validation import (
 )
 
 
-SCRIPT_NAME = 'get-playlist-id.py'
-SCRIPT_DESC = 'Get the ID of a Spotify playlist given a list of names.'
+# Constants
+__SCRIPT_NAME = 'get-playlist-id.py'
+__SCRIPT_DESC = 'Get the ID of a Spotify playlist given a list of names.'
 
 
 logger = get_logger()
@@ -23,7 +24,7 @@ logger = get_logger()
 def parse_args():
 	logger.debug('Parsing arguments')
 
-	parser = argparse.ArgumentParser(prog=SCRIPT_NAME, description=SCRIPT_DESC)
+	parser = argparse.ArgumentParser(prog=__SCRIPT_NAME, description=__SCRIPT_DESC)
 
 	parser.add_argument('client_id', help=ARG_DESCS['client_id'])
 	parser.add_argument('client_secret', help=ARG_DESCS['client_secret'])

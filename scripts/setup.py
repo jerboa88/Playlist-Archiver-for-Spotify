@@ -6,8 +6,9 @@ from utils.cache import CacheArgHandler
 from utils.validation import assert_valid_client_id, assert_valid_client_secret
 
 
-SCRIPT_NAME = 'setup.py'
-SCRIPT_DESC = 'Grant access to your Spotify account and save the access and refresh tokens to a file.'
+# Constants
+__SCRIPT_NAME = 'setup.py'
+__SCRIPT_DESC = 'Grant access to your Spotify account and save the access and refresh tokens to a file.'
 
 
 logger = get_logger()
@@ -37,7 +38,7 @@ def save_tokens_to_file(token_info):
 def parse_args():
 	logger.debug('Parsing arguments')
 
-	parser = argparse.ArgumentParser(prog=SCRIPT_NAME, description=SCRIPT_DESC)
+	parser = argparse.ArgumentParser(prog=__SCRIPT_NAME, description=__SCRIPT_DESC)
 
 	parser.add_argument('client_id', help=ARG_DESCS['client_id'])
 	parser.add_argument('client_secret', help=ARG_DESCS['client_secret'])

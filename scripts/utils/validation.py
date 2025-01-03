@@ -1,3 +1,4 @@
+# Constants
 __CLIENT_ID_LENGTH = 32
 __PLAYLIST_ID_LENGTH = 22
 
