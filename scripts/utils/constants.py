@@ -1,6 +1,5 @@
 # Constants
-APP_NAME = 'Playlist Archiver for Spotify'
-APP_URL = 'https://johng.io/p/playlist-archiver-for-spotify'
+APP_URL = 'johng.io/p/playlist-archiver-for-spotify'
 SCOPE = 'user-library-read playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public'
 REDIRECT_URI = 'http://127.0.0.1:9090'
 TOKENS_FILENAME = 'tokens.yaml'

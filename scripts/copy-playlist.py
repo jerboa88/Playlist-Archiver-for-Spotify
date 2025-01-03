@@ -4,7 +4,6 @@ import queue
 from tqdm import tqdm
 from datetime import datetime
 from utils.constants import (
-	APP_NAME,
 	APP_URL,
 	ARG_DESCS,
 	SCOPE,
@@ -120,7 +119,7 @@ def create_playlist(
 		playlist_name,
 		public=is_public,
 		collaborative=is_collaborative,
-		description=f'Playlist last updated on {readable_ts} by {APP_NAME} ({APP_URL})',
+		description=f'Last updated on {readable_ts} by {APP_URL}.',
 	)
 
 	logger.debug(f'Playlist created: {playlist}')
