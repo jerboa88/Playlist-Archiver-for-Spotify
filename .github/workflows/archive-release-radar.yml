@@ -1,5 +1,6 @@
 # Note: This workflow is disabled because it is no longer possible to archive the Release Radar playlist due to Spotify API changes. See the README for more details. If you fork this repo, you may need to enable it in the Actions tab
 name: Archive Release Radar Playlist
+permissions: {}
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
