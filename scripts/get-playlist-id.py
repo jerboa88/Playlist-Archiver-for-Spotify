@@ -3,11 +3,18 @@ from utils.constants import ARG_DESCS, SCOPE, REDIRECT_URI
 from utils.logging import get_logger, enable_debug_logging
 from utils.auth import authorize
 from utils.cache import CacheArgHandler
-from utils.validation import assert_valid_client_id, assert_valid_client_secret, assert_valid_access_token, assert_valid_refresh_token, assert_valid_playlist_names
+from utils.validation import (
+	assert_valid_client_id,
+	assert_valid_client_secret,
+	assert_valid_access_token,
+	assert_valid_refresh_token,
+	assert_valid_playlist_names,
+)
 
 
-SCRIPT_NAME = 'get-playlist-id.py'
-SCRIPT_DESC = 'Get the ID of a Spotify playlist given a list of names.'
+# Constants
+__SCRIPT_NAME = 'get-playlist-id.py'
+__SCRIPT_DESC = 'Get the ID of a Spotify playlist given a list of names.'
 
 
 logger = get_logger()
@@ -17,14 +24,16 @@ logger = get_logger()
 def parse_args():
 	logger.debug('Parsing arguments')
 
-	parser = argparse.ArgumentParser(prog=SCRIPT_NAME, description=SCRIPT_DESC)
+	parser = argparse.ArgumentParser(prog=__SCRIPT_NAME, description=__SCRIPT_DESC)
 
 	parser.add_argument('client_id', help=ARG_DESCS['client_id'])
 	parser.add_argument('client_secret', help=ARG_DESCS['client_secret'])
 	parser.add_argument('access_token', help=ARG_DESCS['access_token'])
 	parser.add_argument('refresh_token', help=ARG_DESCS['refresh_token'])
 	parser.add_argument('playlist_names', help=ARG_DESCS['playlist_names'], nargs='+')
-	parser.add_argument('--debug', '-d', help=ARG_DESCS['debug'], default=False, action='store_true')
+	parser.add_argument(
+		'--debug', '-d', help=ARG_DESCS['debug'], default=False, action='store_true'
+	)
 
 	args = parser.parse_args()
 
@@ -61,7 +70,9 @@ def get_playlist_id(sp, playlist_names):
 	available_playlist_names = []
 
 	while not playlist_id:
-		chunked_playlists = sp.current_user_playlists(limit=chunk_size, offset=chunk_offset)['items']
+		chunked_playlists = sp.current_user_playlists(
+			limit=chunk_size, offset=chunk_offset
+		)['items']
 
 		if not chunked_playlists:
 			break
@@ -87,9 +98,13 @@ def get_playlist_id(sp, playlist_names):
 
 		formatted_available_playlist_names = '\n  '.join(available_playlist_names)
 
-		logger.debug(f'Finished searching through playlists:\n  {formatted_available_playlist_names}')
+		logger.debug(
+			f'Finished searching through playlists:\n  {formatted_available_playlist_names}'
+		)
 
-		raise ValueError(f'Playlist {playlist_names} not found. Is the playlist name correct?')
+		raise ValueError(
+			f'Playlist {playlist_names} not found. Is the playlist name correct?'
+		)
 
 	return playlist_id
 
@@ -100,8 +115,10 @@ def main():
 
 	args = parse_args()
 	cache_handler = CacheArgHandler(SCOPE, args.access_token, args.refresh_token)
-	sp = authorize(SCOPE, args.client_id, args.client_secret, REDIRECT_URI, cache_handler)
-	user_id = sp.me()['id']
+	sp = authorize(
+		SCOPE, args.client_id, args.client_secret, REDIRECT_URI, cache_handler
+	)
+	sp.me()
 	playlist_id = get_playlist_id(sp, args.playlist_names)
 
 	print(playlist_id)
