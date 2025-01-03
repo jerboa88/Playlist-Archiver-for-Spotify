@@ -1,6 +1,7 @@
 import argparse
 import threading
 import queue
+from tqdm import tqdm
 from datetime import datetime
 from utils.constants import (
 	APP_NAME,
@@ -28,6 +29,8 @@ __SCRIPT_NAME = 'copy-playlist.py'
 __SCRIPT_DESC = 'Make a copy of a given playlist.'
 __CHUNK_SIZE_FOR_FETCH = 50
 __CHUNK_SIZE_FOR_ADD = 100
+__PROGRESS_BAR_UNIT = ' tracks'
+__PROGRESS_BAR_COLOUR = '#1ED760'
 
 
 logger = get_logger()
@@ -99,30 +102,41 @@ def fetch_chunk_of_saved_tracks(sp, _, chunk_offset, limit=__CHUNK_SIZE_FOR_FETC
 
 
 # Fetch a list of track IDs for a playlist and add them to the queue
-def fetch_playlist_tracks(sp, track_ids_queue, playlist_id, fetch_fn):
+def fetch_playlist_tracks(
+	sp, track_ids_queue, playlist_id, fetch_fn, total_num_of_tracks
+):
 	logger.debug(f'Getting track IDs for playlist {playlist_id}')
 
 	chunk_offset = 0
 
-	while True:
-		chunked_tracks = fetch_fn(sp, playlist_id, chunk_offset)['items']
+	with tqdm(
+		unit=__PROGRESS_BAR_UNIT,
+		colour=__PROGRESS_BAR_COLOUR,
+		position=0,
+		desc='📥 Fetching tracks from playlist',
+		total=total_num_of_tracks,
+	) as progress_bar:
+		while True:
+			chunked_tracks = fetch_fn(sp, playlist_id, chunk_offset)['items']
 
-		# If there are no more tracks, exit the loop
-		if not chunked_tracks:
-			break
+			# If there are no more tracks, exit the loop
+			if not chunked_tracks:
+				break
 
-		chunked_track_ids = list(
-			map(lambda track: track['track']['id'], chunked_tracks)
-		)
-		num_of_tracks_in_chunk = len(chunked_track_ids)
+			chunked_track_ids = list(
+				map(lambda track: track['track']['id'], chunked_tracks)
+			)
+			num_of_tracks_in_chunk = len(chunked_track_ids)
 
-		# Add a chunk of track IDs to the queue
-		for track_id in chunked_track_ids:
-			track_ids_queue.put(track_id)
+			# Add a chunk of track IDs to the queue
+			for track_id in chunked_track_ids:
+				track_ids_queue.put(track_id)
 
-		logger.debug(f'Fetched {num_of_tracks_in_chunk} tracks from playlist')
+			logger.debug(f'Fetched {num_of_tracks_in_chunk} tracks from playlist')
 
-		chunk_offset += __CHUNK_SIZE_FOR_FETCH
+			progress_bar.update(num_of_tracks_in_chunk)
+
+			chunk_offset += __CHUNK_SIZE_FOR_FETCH
 
 	# Add a sentinel value to the queue to indicate that the producer is done
 	track_ids_queue.put(None)
@@ -135,32 +149,42 @@ def add_tracks_to_playlist(
 	sp,
 	track_ids_queue,
 	output_playlist_id,
+	total_num_of_tracks,
 ):
 	is_waiting_on_jobs = True
 
-	while is_waiting_on_jobs:
-		chunked_track_ids = []
+	with tqdm(
+		unit=__PROGRESS_BAR_UNIT,
+		colour=__PROGRESS_BAR_COLOUR,
+		position=1,
+		desc='📤 Adding tracks to playlist',
+		total=total_num_of_tracks,
+	) as progress_bar:
+		while is_waiting_on_jobs:
+			chunked_track_ids = []
 
-		# Get a chunk of track IDs to include in the API call
-		for _ in range(__CHUNK_SIZE_FOR_ADD):
-			track_id = track_ids_queue.get()
+			# Get a chunk of track IDs to include in the API call
+			for _ in range(__CHUNK_SIZE_FOR_ADD):
+				track_id = track_ids_queue.get()
 
-			if track_id is None:
-				is_waiting_on_jobs = False
+				if not track_id:
+					is_waiting_on_jobs = False
 
-				break
+					break
 
-			chunked_track_ids.append(track_id)
+				chunked_track_ids.append(track_id)
 
-		num_of_tracks_in_chunk = len(chunked_track_ids)
+			num_of_tracks_in_chunk = len(chunked_track_ids)
 
-		sp.playlist_add_items(output_playlist_id, chunked_track_ids)
+			sp.playlist_add_items(output_playlist_id, chunked_track_ids)
 
-		logger.debug(f'Added {num_of_tracks_in_chunk} tracks to playlist')
+			logger.debug(f'Added {num_of_tracks_in_chunk} tracks to playlist')
 
-		# Mark the track IDs as done
-		for _ in chunked_track_ids:
-			track_ids_queue.task_done()
+			progress_bar.update(num_of_tracks_in_chunk)
+
+			# Mark the jobs as done
+			for _ in chunked_track_ids:
+				track_ids_queue.task_done()
 
 	logger.debug('Finished adding tracks to playlist')
 
@@ -179,12 +203,13 @@ def main():
 	)
 	user_id = sp.me()['id']
 
-	# Use a different function to fetch tracks depending on the input playlist type
+	# Use different functions to fetch tracks depending on the input playlist type
 	if args.input_playlist_id == SAVED_TRACKS_KEYWORD:
 		fetch_fn = fetch_chunk_of_saved_tracks
 	else:
 		fetch_fn = fetch_chunk_of_playlist_tracks
 
+	total_num_of_tracks = fetch_fn(sp, args.input_playlist_id, 0, 1)['total']
 	output_playlist_id = create_playlist(sp, user_id, args.output_playlist_name)
 	track_ids_queue = queue.Queue()
 
@@ -195,6 +220,7 @@ def main():
 			track_ids_queue,
 			args.input_playlist_id,
 			fetch_fn,
+			total_num_of_tracks,
 		),
 		daemon=True,
 	).start()
@@ -202,6 +228,7 @@ def main():
 		sp,
 		track_ids_queue,
 		output_playlist_id,
+		total_num_of_tracks,
 	)
 	track_ids_queue.join()
 
