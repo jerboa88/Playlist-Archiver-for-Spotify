@@ -14,10 +14,9 @@ from utils.logging import get_logger, enable_debug_logging
 from utils.auth import authorize
 from utils.cache import CacheArgHandler
 from utils.validation import (
-	assert_valid_client_id,
-	assert_valid_client_secret,
-	assert_valid_access_token,
-	assert_valid_refresh_token,
+	get_tokens_arg_parser,
+	assert_valid_client_creds,
+	assert_valid_tokens,
 	assert_valid_input_playlist_id,
 	assert_valid_output_playlist_name,
 )
@@ -40,12 +39,10 @@ logger = get_logger()
 def parse_args():
 	logger.debug('Parsing arguments')
 
-	parser = argparse.ArgumentParser(prog=__SCRIPT_NAME, description=__SCRIPT_DESC)
+	parser = argparse.ArgumentParser(
+		parents=[get_tokens_arg_parser()], prog=__SCRIPT_NAME, description=__SCRIPT_DESC
+	)
 
-	parser.add_argument('client_id', help=ARG_DESCS['client_id'])
-	parser.add_argument('client_secret', help=ARG_DESCS['client_secret'])
-	parser.add_argument('access_token', help=ARG_DESCS['access_token'])
-	parser.add_argument('refresh_token', help=ARG_DESCS['refresh_token'])
 	parser.add_argument('input_playlist_id', help=ARG_DESCS['input_playlist_id'])
 	parser.add_argument('output_playlist_name', help=ARG_DESCS['output_playlist_name'])
 	parser.add_argument(
@@ -60,19 +57,14 @@ def parse_args():
 		default='auto',
 		help=ARG_DESCS['--contributions'],
 	)
-	parser.add_argument(
-		'--debug', '-d', help=ARG_DESCS['debug'], default=False, action='store_true'
-	)
 
 	args = parser.parse_args()
 
 	if args.debug:
 		enable_debug_logging(logger)
 
-	assert_valid_client_id(args.client_id)
-	assert_valid_client_secret(args.client_secret)
-	assert_valid_access_token(args.access_token)
-	assert_valid_refresh_token(args.refresh_token)
+	assert_valid_client_creds(args.client_id, args.client_secret)
+	assert_valid_tokens(args.access_token, args.refresh_token)
 	assert_valid_input_playlist_id(args.input_playlist_id)
 	assert_valid_output_playlist_name(args.output_playlist_name)
 
