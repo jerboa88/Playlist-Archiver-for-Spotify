@@ -31,6 +31,7 @@ __CHUNK_SIZE_FOR_FETCH = 50
 __CHUNK_SIZE_FOR_ADD = 100
 __PROGRESS_BAR_UNIT = ' tracks'
 __PROGRESS_BAR_COLOUR = '#1ED760'
+__PLAYLIST_TRACK_LIMIT = 10000
 
 
 logger = get_logger()
@@ -210,6 +211,12 @@ def main():
 		fetch_fn = fetch_chunk_of_playlist_tracks
 
 	total_num_of_tracks = fetch_fn(sp, args.input_playlist_id, 0, 1)['total']
+
+	if total_num_of_tracks >= __PLAYLIST_TRACK_LIMIT:
+		logger.warn(
+			f'The input playlist has {total_num_of_tracks} tracks, but Spotify allows a maximum of {__PLAYLIST_TRACK_LIMIT} tracks in a playlist. We might not be able to copy them all'
+		)
+
 	output_playlist_id = create_playlist(sp, user_id, args.output_playlist_name)
 	track_ids_queue = queue.Queue()
 
