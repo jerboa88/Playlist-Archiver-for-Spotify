@@ -26,11 +26,11 @@
 ## About
 
 > [!IMPORTANT]
-> **Spotify has killed this script.** On November 27, 2024, Spotify implemented [new changes to their Web API] that makes it impossible to retrieve information about "Algorithmic and Spotify-owned editorial playlists". You can still use this script to make copies of other types of playlists, but it will no longer work for Discover Weekly, Release Radar, Spotify Wrapped, or any other algorithmic playlists.
+> **Spotify has neutered this script.** On November 27, 2024, Spotify implemented [new changes to their Web API] that makes it impossible to retrieve information about "Algorithmic and Spotify-owned editorial playlists". You can still use this script to make copies of other types of playlists, but it will no longer work for Discover Weekly, Release Radar, Spotify Wrapped, or any other algorithmic playlists.
 >
-> It is unfortunate that Spotify has chosen to make this change, and disappointing that they did so without warning to developers, many of whom have far more complicated projects that rely on this functionality. I hope that they will reconsider this decision in the future. If this affects you, you can leave a comment on [this Spotify Community post] to let them know how you feel.
+> It is unfortunate that Spotify has chosen to make this change, and disappointing that they did so without warning to developers, many of whom have far more complicated projects that rely on this functionality. If this affects you, you can leave a comment on [this Spotify Community post] to let them know how you feel.
 
-A Python script for making copies of Spotify playlists. This can be used with the provided GitHub Actions workflows to automatically archive Discover Weekly and Release Radar playlists every week.
+A Python script for making copies of Spotify playlists. This can be used with the provided GitHub Actions workflows to automatically archive Discover Weekly and Release Radar playlists every week, take a yearly snapshot of your Liked Songs playlist, or to make a one-time copy of any playlist.
 
 If you prefer, you can run the script manually, or with other automation tools like Cron or Windows Task Scheduler instead of GitHub Actions.
 
@@ -133,6 +133,8 @@ options:
 #### [copy-playlist.py]
 This is the main script that copies a playlist. It takes in the ID of the input playlist and the name of the output playlists, and copies all the tracks from the input playlist to the output playlist. If the output playlist does not exist, it will be created.
 
+You can also set the input playlist ID to `saved_tracks` to make a copy of your 'Liked Songs' playlist.
+
 You can include [strftime format codes] in the output playlist name to include the date/time in the name. For example, `Discover Weekly - %Y-%m-%d` will create a new playlist with the name `Discover Weekly - 2025-01-01`.
 
 ```
@@ -145,13 +147,23 @@ positional arguments:
   client_secret         Your client secret for Spotify. Get one from https://developer.spotify.com/dashboard
   access_token          Your access token for Spotify. This can be found in tokens.yaml after the program is run for the first time
   refresh_token         Your refresh token for Spotify. This can be found in tokens.yaml after the program is run for the first time
-  input_playlist_id     The ID of the playlist you want to make a copy of
+  input_playlist_id     The ID of the playlist you want to make a copy of, or the special string 'saved_tracks' to make a copy of your 'Liked Songs' playlist
   output_playlist_name  The name of the output playlist. strftime format codes can be used to include the date/time in the name
 
 options:
   -h, --help            show this help message and exit
   --debug, -d           Whether to print additional information to the console for debugging. Default: false
 ```
+
+### Permissions
+This currently script requests the following scopes from the Spotify API:
+- `user-library-read`: to read your saved tracks
+- `playlist-read-private`: to read your private playlists
+- `playlist-read-collaborative`: to read your collaborative playlists
+- `playlist-modify-private`: to create and modify your private playlists
+
+If you aren't using all the features that this script provides, feel free to remove the scopes you don't need from the `SCOPE` variable in [constants.py]. For example, if you are only making copies of public, non-collaborative playlists, you can remove the `user-library-read`, `playlist-read-private`, and `playlist-read-collaborative` scopes.
+
 
 ## Limitations
 - The setup script must be run once locally before the GitHub Actions workflows will work. This is because the Spotify API requires user authorization via the browser, which is not possible in a headless environment
