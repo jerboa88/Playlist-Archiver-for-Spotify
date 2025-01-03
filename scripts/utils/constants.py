@@ -1,9 +1,10 @@
 # Constants
 APP_NAME = 'Playlist Archiver for Spotify'
 APP_URL = 'https://johng.io/p/playlist-archiver-for-spotify'
-SCOPE = 'playlist-read-private playlist-read-collaborative playlist-modify-private'
+SCOPE = 'user-library-read playlist-read-private playlist-read-collaborative playlist-modify-private'
 REDIRECT_URI = 'http://127.0.0.1:9090'
 TOKENS_FILENAME = 'tokens.yaml'
+SAVED_TRACKS_KEYWORD = 'saved_tracks'
 ARG_DESCS = {
 	'client_id': 'Your client ID for Spotify. Get one from https://developer.spotify.com/dashboard',
 	'client_secret': 'Your client secret for Spotify. Get one from https://developer.spotify.com/dashboard',

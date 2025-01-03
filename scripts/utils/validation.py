@@ -1,3 +1,6 @@
+from utils.constants import SAVED_TRACKS_KEYWORD
+
+
 # Constants
 __CLIENT_ID_LENGTH = 32
 __PLAYLIST_ID_LENGTH = 22
@@ -47,7 +50,10 @@ def assert_valid_playlist_names(playlist_names):
 # Check if an input playlist ID is valid
 def assert_valid_input_playlist_id(input_playlist_id):
 	__assert_non_empty('input playlist ID', input_playlist_id)
-	__assert_length('input playlist ID', input_playlist_id, __PLAYLIST_ID_LENGTH)
+
+	# Skip length check if the input playlist ID is the 'saved_tracks' keyword
+	if input_playlist_id != SAVED_TRACKS_KEYWORD:
+		__assert_length('input playlist ID', input_playlist_id, __PLAYLIST_ID_LENGTH)
 
 
 # Check if an output playlist name is valid
