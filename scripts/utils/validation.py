@@ -1,9 +1,34 @@
-from utils.constants import SAVED_TRACKS_KEYWORD
+from argparse import ArgumentParser
+from utils.constants import ARG_DESCS, SAVED_TRACKS_KEYWORD
 
 
 # Constants
 __CLIENT_ID_LENGTH = 32
 __PLAYLIST_ID_LENGTH = 22
+
+
+# Get an argument parser for client credentials
+def get_client_creds_arg_parser():
+	parser = ArgumentParser(add_help=False)
+
+	parser.add_argument('client_id', help=ARG_DESCS['client_id'])
+	parser.add_argument('client_secret', help=ARG_DESCS['client_secret'])
+	parser.add_argument(
+		'--debug', '-d', help=ARG_DESCS['debug'], default=False, action='store_true'
+	)
+
+	return parser
+
+
+# Get an argument parser for client credentials and access/refresh tokens
+def get_tokens_arg_parser():
+	parent_parser = get_client_creds_arg_parser()
+	parser = ArgumentParser(add_help=False, parents=[parent_parser])
+
+	parser.add_argument('access_token', help=ARG_DESCS['access_token'])
+	parser.add_argument('refresh_token', help=ARG_DESCS['refresh_token'])
+
+	return parser
 
 
 # Check that a value is not empty
@@ -20,25 +45,17 @@ def __assert_length(value_name, value, length):
 		)
 
 
-# Check if a client ID is valid
-def assert_valid_client_id(client_id):
+# Check if client credentials are valid
+def assert_valid_client_creds(client_id, client_secret):
 	__assert_non_empty('client ID', client_id)
 	__assert_length('client ID', client_id, __CLIENT_ID_LENGTH)
-
-
-# Check if a client secret is valid
-def assert_valid_client_secret(client_secret):
 	__assert_non_empty('client secret', client_secret)
 	__assert_length('client secret', client_secret, __CLIENT_ID_LENGTH)
 
 
-# Check if a client secret is valid
-def assert_valid_access_token(access_token):
+# Check if access and refresh tokens are valid
+def assert_valid_tokens(access_token, refresh_token):
 	__assert_non_empty('access token', access_token)
-
-
-# Check if a client secret is valid
-def assert_valid_refresh_token(refresh_token):
 	__assert_non_empty('refresh token', refresh_token)
 
 

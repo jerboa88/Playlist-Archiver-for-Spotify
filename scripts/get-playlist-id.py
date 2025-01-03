@@ -4,10 +4,9 @@ from utils.logging import get_logger, enable_debug_logging
 from utils.auth import authorize
 from utils.cache import CacheArgHandler
 from utils.validation import (
-	assert_valid_client_id,
-	assert_valid_client_secret,
-	assert_valid_access_token,
-	assert_valid_refresh_token,
+	get_tokens_arg_parser,
+	assert_valid_client_creds,
+	assert_valid_tokens,
 	assert_valid_playlist_names,
 )
 
@@ -24,26 +23,19 @@ logger = get_logger()
 def parse_args():
 	logger.debug('Parsing arguments')
 
-	parser = argparse.ArgumentParser(prog=__SCRIPT_NAME, description=__SCRIPT_DESC)
-
-	parser.add_argument('client_id', help=ARG_DESCS['client_id'])
-	parser.add_argument('client_secret', help=ARG_DESCS['client_secret'])
-	parser.add_argument('access_token', help=ARG_DESCS['access_token'])
-	parser.add_argument('refresh_token', help=ARG_DESCS['refresh_token'])
-	parser.add_argument('playlist_names', help=ARG_DESCS['playlist_names'], nargs='+')
-	parser.add_argument(
-		'--debug', '-d', help=ARG_DESCS['debug'], default=False, action='store_true'
+	parser = argparse.ArgumentParser(
+		parents=[get_tokens_arg_parser()], prog=__SCRIPT_NAME, description=__SCRIPT_DESC
 	)
+
+	parser.add_argument('playlist_names', help=ARG_DESCS['playlist_names'], nargs='+')
 
 	args = parser.parse_args()
 
 	if args.debug:
 		enable_debug_logging(logger)
 
-	assert_valid_client_id(args.client_id)
-	assert_valid_client_secret(args.client_secret)
-	assert_valid_access_token(args.access_token)
-	assert_valid_refresh_token(args.refresh_token)
+	assert_valid_client_creds(args.client_id, args.client_secret)
+	assert_valid_tokens(args.access_token, args.refresh_token)
 	assert_valid_playlist_names(args.playlist_names)
 
 	return args

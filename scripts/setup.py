@@ -3,7 +3,10 @@ from utils.constants import ARG_DESCS, SCOPE, REDIRECT_URI, TOKENS_FILENAME
 from utils.logging import get_logger, enable_debug_logging
 from utils.auth import authorize
 from utils.cache import CacheArgHandler
-from utils.validation import assert_valid_client_id, assert_valid_client_secret
+from utils.validation import (
+	get_client_creds_arg_parser,
+	assert_valid_client_creds,
+)
 
 
 # Constants
@@ -12,6 +15,24 @@ __SCRIPT_DESC = 'Grant access to your Spotify account and save the access and re
 
 
 logger = get_logger()
+
+
+# Parse command line arguments
+def parse_args():
+	logger.debug('Parsing arguments')
+
+	args = argparse.ArgumentParser(
+		parents=[get_client_creds_arg_parser()],
+		prog=__SCRIPT_NAME,
+		description=__SCRIPT_DESC,
+	).parse_args()
+
+	if args.debug:
+		enable_debug_logging(logger)
+
+	assert_valid_client_creds(args.client_id, args.client_secret)
+
+	return args
 
 
 # Save tokens to a file
@@ -32,29 +53,6 @@ def save_tokens_to_file(token_info):
 	logger.info(
 		f'Tokens were saved to {TOKENS_FILENAME}. Do not push this file to GitHub'
 	)
-
-
-# Parse command line arguments
-def parse_args():
-	logger.debug('Parsing arguments')
-
-	parser = argparse.ArgumentParser(prog=__SCRIPT_NAME, description=__SCRIPT_DESC)
-
-	parser.add_argument('client_id', help=ARG_DESCS['client_id'])
-	parser.add_argument('client_secret', help=ARG_DESCS['client_secret'])
-	parser.add_argument(
-		'--debug', '-d', help=ARG_DESCS['debug'], default=False, action='store_true'
-	)
-
-	args = parser.parse_args()
-
-	if args.debug:
-		enable_debug_logging(logger)
-
-	assert_valid_client_id(args.client_id)
-	assert_valid_client_secret(args.client_secret)
-
-	return args
 
 
 # Script entry point

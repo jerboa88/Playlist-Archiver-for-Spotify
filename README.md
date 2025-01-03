@@ -104,7 +104,7 @@ positional arguments:
 
 options:
   -h, --help     show this help message and exit
-  --debug, -d    Whether to print additional information to the console for debugging. Default: false
+  --debug, -d    Whether to print additional information to the console for debugging (default: false)
 ```
 
 #### [get-playlist-id.py]
@@ -127,7 +127,7 @@ positional arguments:
 
 options:
   -h, --help      show this help message and exit
-  --debug, -d     Whether to print additional information to the console for debugging. Default: false
+  --debug, -d     Whether to print additional information to the console for debugging (default: false)
 ```
 
 #### [copy-playlist.py]
@@ -138,7 +138,8 @@ You can also set the input playlist ID to `saved_tracks` to make a copy of your 
 You can include [strftime format codes] in the output playlist name to include the date/time in the name. For example, `Discover Weekly - %Y-%m-%d` will create a new playlist with the name `Discover Weekly - 2025-01-01`.
 
 ```
-usage: copy-playlist.py [-h] [--debug] client_id client_secret access_token refresh_token input_playlist_id output_playlist_name
+usage: copy-playlist.py [-h] [--debug] [--visibility {auto,private,public}] [--contributions {auto,individual,collaborative}]
+                        client_id client_secret access_token refresh_token input_playlist_id output_playlist_name
 
 Make a copy of a given playlist.
 
@@ -152,7 +153,13 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  --debug, -d           Whether to print additional information to the console for debugging. Default: false
+  --debug, -d           Whether to print additional information to the console for debugging (default: false)
+  --visibility {auto,private,public}
+                        Set the contribution mode of the output playlist. When set to 'auto', the contribution mode will be set to that of the input playlist
+                        (default: auto)
+  --contributions {auto,individual,collaborative}
+                        Set the contribution mode of the output playlist. When set to 'auto', the contribution mode will be set to that of the input playlist
+                        (default: auto)
 ```
 
 ### Permissions
@@ -161,6 +168,7 @@ This currently script requests the following scopes from the Spotify API:
 - `playlist-read-private`: to read your private playlists
 - `playlist-read-collaborative`: to read your collaborative playlists
 - `playlist-modify-private`: to create and modify your private playlists
+- `playlist-modify-public`: to create and modify your public playlists
 
 If you aren't using all the features that this script provides, feel free to remove the scopes you don't need from the `SCOPE` variable in [constants.py]. For example, if you are only making copies of public, non-collaborative playlists, you can remove the `user-library-read`, `playlist-read-private`, and `playlist-read-collaborative` scopes.
 
