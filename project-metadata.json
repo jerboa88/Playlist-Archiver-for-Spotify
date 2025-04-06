@@ -1,0 +1,16 @@
+{
+  "$schema": "https://johng.io/schema/project-metadata.json",
+  "name": "Playlist Archiver for Spotify",
+  "background": "A CLI app that automatically archives Spotify playlists. Written in Python, this program integrates seamlessly into a CI workflow via GitHub Actions. It was developed to replace a repetitive manual task and explore the capabilities of GitHub Actions and the Spotify API.",
+	"logoPath": "logo.svg",
+	"category": "App",
+	"subcategory": "CLI",
+  "technologies": [
+    "GitHub Actions"
+  ],
+  "schema": {
+    "type": "Software",
+    "applicationCategory": "Multimedia",
+    "operatingSystem": "Any"
+  }
+}
