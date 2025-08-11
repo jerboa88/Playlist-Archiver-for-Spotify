@@ -23,7 +23,7 @@
 </div>
 
 
-## About
+## 👋 About
 
 > [!IMPORTANT]
 > **Spotify has neutered this script.** On November 27, 2024, Spotify implemented [new changes to their Web API] that makes it impossible to retrieve information about "Algorithmic and Spotify-owned editorial playlists". You can still use this script to make copies of other types of playlists, but it will no longer work for Discover Weekly, Release Radar, Spotify Wrapped, or any other algorithmic playlists.
@@ -34,8 +34,22 @@ A Python script for making copies of Spotify playlists. This can be used with th
 
 If you prefer, you can run the script manually, or with other automation tools like Cron or Windows Task Scheduler instead of GitHub Actions.
 
+### Permissions
+This currently script requests the following scopes from the Spotify API:
+- `user-library-read`: to read your saved tracks
+- `playlist-read-private`: to read your private playlists
+- `playlist-read-collaborative`: to read your collaborative playlists
+- `playlist-modify-private`: to create and modify your private playlists
+- `playlist-modify-public`: to create and modify your public playlists
 
-## Getting Started
+If you aren't using all the features that this script provides, feel free to remove the scopes you don't need from the `SCOPE` variable in [constants.py]. For example, if you are only making copies of public, non-collaborative playlists, you can remove the `user-library-read`, `playlist-read-private`, and `playlist-read-collaborative` scopes.
+
+### Limitations
+- The setup script must be run once locally before the GitHub Actions workflows will work. This is because the Spotify API requires user authorization via the browser, which is not possible in a headless environment
+- Playlists can not be placed into folders because there is currently no way to create or manage folders via the Spotify API. If you want the archived playlist to be in a folder, you will have to move them manually
+
+
+## 🚀 Getting Started
 
 ### Prerequisites
 - A Spotify account
@@ -49,7 +63,7 @@ If you prefer, you can run the script manually, or with other automation tools l
 4. Run `python setup.py SPOTIFY_CLIENT_ID SPOTIFY_CLIENT_SECRET` to grant the script access to your Spotify account. Replace `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` with your own values. After granting the app access, a `tokens.yaml` file will be created in the same directory as the script. This file contains your access and refresh tokens and should be kept secret.
 
 
-## Usage
+## 🕹️ Usage
 To copy a playlist, you'll need to call [copy-playlist.py] with the ID of the input playlist, a name for the destination playlist, and your Spotify credentials. See [Advanced Script Usage] for more details.
 
 To find the ID of a playlist, see [Finding the Playlist ID].
@@ -83,7 +97,7 @@ We can use GitHub Actions to automatically run the script every week.
 2. Create your own workflows or edit the existing ones under [.github/workflows/]. The existing workflows are set up to archive Discover Weekly and Release Radar playlists every Monday and Friday, respectively. Edit the `cron` schedule to change when the script runs. See below for all available arguments for the script.
 
 
-### Advanced Script Usage
+## 🤖 Advanced Usage
 
 > [!WARNING]
 > When debug mode is enabled, these scripts may print potentially private information from your Spotify account to the console like playlist IDs and names. This is useful for debugging, but if your workflow logs are public and you don't want to share this information, consider disabling debug logging.
@@ -162,27 +176,12 @@ options:
                         (default: auto)
 ```
 
-### Permissions
-This currently script requests the following scopes from the Spotify API:
-- `user-library-read`: to read your saved tracks
-- `playlist-read-private`: to read your private playlists
-- `playlist-read-collaborative`: to read your collaborative playlists
-- `playlist-modify-private`: to create and modify your private playlists
-- `playlist-modify-public`: to create and modify your public playlists
 
-If you aren't using all the features that this script provides, feel free to remove the scopes you don't need from the `SCOPE` variable in [constants.py]. For example, if you are only making copies of public, non-collaborative playlists, you can remove the `user-library-read`, `playlist-read-private`, and `playlist-read-collaborative` scopes.
-
-
-## Limitations
-- The setup script must be run once locally before the GitHub Actions workflows will work. This is because the Spotify API requires user authorization via the browser, which is not possible in a headless environment
-- Playlists can not be placed into folders because there is currently no way to create or manage folders via the Spotify API. If you want the archived playlist to be in a folder, you will have to move them manually
-
-
-## Contributing
+## 🤝 Contributing
 Contributions, issues, and forks are welcome but this is a hobby project so don't expect too much from it. [SemVer](http://semver.org/) is used for versioning.
 
 
-## License
+## 🧾 License
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 This project includes various resources which carry their own copyright notices and license terms. See [LICENSE-THIRD-PARTY.md](LICENSE-THIRD-PARTY.md) for more details.
